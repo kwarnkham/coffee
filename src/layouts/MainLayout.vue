@@ -11,31 +11,36 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
+        <q-toolbar-title> Quasar App </q-toolbar-title>
 
         <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+        <q-item-label header> Essential Links </q-item-label>
+        <template v-for="link in links" :key="link.route">
+          <q-item
+            clickable
+            v-if="
+              (link.requiresAuth && userStore.getUser) ||
+              (!userStore.getUser && !link.requiresAuth)
+            "
+            :to="{
+              name: link.route,
+            }"
+          >
+            <q-item-section>
+              <q-item-label>{{ link.name }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
+        <q-item clickable v-if="userStore.getUser" @click="logout">
+          <q-item-section>
+            <q-item-label>Logout</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
@@ -45,72 +50,53 @@
   </q-layout>
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+<script setup>
+import { useQuasar } from "quasar";
+import useUtil from "src/composables/util";
+import { useUserStore } from "src/stores/user-store";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { api as axios } from "src/boot/axios";
 
-const linksList = [
+const leftDrawerOpen = ref(false);
+const toggleLeftDrawer = () => {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+};
+const userStore = useUserStore();
+const { api } = useUtil();
+const { dialog, localStorage } = useQuasar();
+const router = useRouter();
+const links = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    name: "Inventory Item",
+    route: "inventory-item",
+    requiresAuth: true,
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
+    name: "Login",
+    route: "login",
+    requiresAuth: false,
   },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
+];
 
-export default defineComponent({
-  name: 'MainLayout',
-
-  components: {
-    EssentialLink
-  },
-
-  setup () {
-    const leftDrawerOpen = ref(false)
-
-    return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
-    }
-  }
-})
+const logout = () => {
+  dialog({
+    title: "Confirm",
+    message: "Do you want to logout?",
+    noBackdropDismiss: true,
+    cancel: true,
+  }).onOk(() => {
+    api({
+      method: "POST",
+      url: "logout",
+    }).finally(() => {
+      localStorage.remove("token");
+      userStore.setUser(null);
+      axios.defaults.headers.common["Authorization"] = undefined;
+      router.replace({
+        name: "index",
+      });
+    });
+  });
+};
 </script>
