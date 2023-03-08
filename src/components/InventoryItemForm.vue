@@ -2,9 +2,9 @@
   <q-form @submit.prevent="submit" class="q-px-md q-pb-md">
     <div class="text-center text-subtitle1 text-weight-bold">Record Item</div>
 
-    <q-input v-model="form.name" required label="Name" />
+    <q-input v-model="form.name" required label="Name" autofocus />
     <q-input
-      v-model="form.price"
+      v-model.number="form.price"
       required
       label="Price"
       type="numeric"
@@ -12,36 +12,66 @@
       pattern="[0-9]*"
     />
     <q-input
-      v-model="form.quantity"
+      v-model.number="form.quantity"
       required
       label="Quantity"
       type="numeric"
       inputmode="numeric"
       pattern="[0-9]*"
     />
-    <q-input v-model="form.note" type="textarea" label="Note" />
+    <q-input v-model.trim="form.note" type="textarea" label="Note" />
 
     <div class="text-right q-mt-md">
       <q-btn icon="save" flat type="submit" />
+    </div>
+    <div class="row justify-around q-py-sm">
+      <q-btn
+        :label="item.name"
+        no-caps
+        v-for="item in items"
+        :key="item.id"
+        @click="chooseItem(item)"
+      />
     </div>
   </q-form>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import useUtil from "src/composables/util";
-import { useQuasar } from "quasar";
-const { dialog } = useQuasar();
+import { debounce } from "quasar";
+
 const emit = defineEmits(["itemPurchased"]);
 const form = ref({
-  name: "Coffee Bean",
-  quantity: "10",
-  price: "1000",
+  name: "",
+  quantity: "",
+  price: "",
   note: "",
 });
 
 const { api } = useUtil();
-
+const search = ref("");
+const items = ref([]);
+const chooseItem = (item) => {
+  form.value.name = item.name;
+  form.value.price = item.latest_purchase?.price || "";
+};
+watch(
+  search,
+  debounce(() => {
+    if (search.value)
+      api({
+        method: "GET",
+        url: "items/search",
+        params: {
+          limit: 5,
+          search: search.value,
+        },
+      }).then(({ data }) => {
+        items.value = data.items;
+      });
+  }, 400)
+);
 const submit = () => {
   api(
     {
@@ -54,4 +84,14 @@ const submit = () => {
     emit("itemPurchased", data.item);
   });
 };
+
+watch(
+  form,
+  () => {
+    search.value = form.value.name;
+  },
+  {
+    deep: true,
+  }
+);
 </script>

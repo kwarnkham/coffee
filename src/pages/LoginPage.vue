@@ -3,13 +3,13 @@
     <q-form @submit.prevent="submit">
       <div class="text-center text-subtitle1 text-weight-bold">Login</div>
       <q-input
-        v-model="form.name"
+        v-model.trim="form.name"
         required
         label="Name"
         autocomplete="username"
       />
       <q-input
-        v-model="form.password"
+        v-model.trim="form.password"
         required
         label="Password"
         :type="showPasword ? 'text' : 'password'"
