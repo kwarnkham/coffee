@@ -10,22 +10,54 @@
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
+        <q-btn
+          flat
+          dense
+          round
+          icon="arrow_back"
+          @click="$router.go(-1)"
+          v-if="$route.name != 'index'"
+        />
 
-        <q-toolbar-title> Quasar App </q-toolbar-title>
+        <q-toolbar-title> သေးသေးတင် Coffee </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>
+          <q-btn
+            icon="shopping_cart"
+            round
+            color="secondary"
+            @click="
+              $router.push({
+                name: 'cart',
+              })
+            "
+          >
+            <q-badge
+              color="red"
+              rounded
+              floating
+              v-if="cartStore.getCart.products.length > 0"
+            />
+          </q-btn>
+        </div>
       </q-toolbar>
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label header> Essential Links </q-item-label>
+        <q-item-label header>
+          {{
+            userStore.getUser?.roles?.map((e) => e.name).join(", ") ?? "Welcome"
+          }}
+        </q-item-label>
         <template v-for="link in links" :key="link.route">
           <q-item
+            exact
             clickable
             v-if="
               (link.requiresAuth && userStore.getUser) ||
-              (!userStore.getUser && !link.requiresAuth)
+              (link.onlyGuest && !userStore.getUser) ||
+              (!link.requiresAuth && !link.onlyGuest)
             "
             :to="{
               name: link.route,
@@ -57,16 +89,22 @@ import { useUserStore } from "src/stores/user-store";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { api as axios } from "src/boot/axios";
+import { useCartStore } from "src/stores/cart-store";
 
 const leftDrawerOpen = ref(false);
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 };
 const userStore = useUserStore();
+const cartStore = useCartStore();
 const { api } = useUtil();
 const { dialog, localStorage } = useQuasar();
 const router = useRouter();
 const links = [
+  {
+    name: "Home",
+    route: "index",
+  },
   {
     name: "Inventory Item",
     route: "inventory-item",
@@ -75,7 +113,7 @@ const links = [
   {
     name: "Login",
     route: "login",
-    requiresAuth: false,
+    onlyGuest: true,
   },
 ];
 

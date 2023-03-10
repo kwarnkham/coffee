@@ -3,6 +3,7 @@
     <q-form @submit.prevent="submit">
       <div class="text-center text-subtitle1 text-weight-bold">Login</div>
       <q-input
+        autofocus
         v-model.trim="form.name"
         required
         label="Name"

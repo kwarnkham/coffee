@@ -12,7 +12,29 @@ const routes = [
       {
         path: 'inventory-item',
         component: () => import('pages/InventoryItem.vue'),
-        name: 'inventory-item'
+        name: 'inventory-item',
+        meta: {
+          role: "sale",
+          requiresAuth: true
+        }
+      },
+      {
+        path: 'cart',
+        component: () => import('pages/CartPage.vue'),
+        name: 'cart',
+        meta: {
+          role: "sale",
+          requiresAuth: true
+        }
+      },
+      {
+        path: 'orders/:order',
+        component: () => import('pages/OrderDetails.vue'),
+        name: 'order-details',
+        meta: {
+          role: "sale",
+          requiresAuth: true
+        }
       },
       {
         path: 'login',
