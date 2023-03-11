@@ -77,7 +77,7 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <router-view :key="$route.name" />
     </q-page-container>
   </q-layout>
 </template>
@@ -108,6 +108,11 @@ const links = [
   {
     name: "Inventory Item",
     route: "inventory-item",
+    requiresAuth: true,
+  },
+  {
+    name: "Orders",
+    route: "orders",
     requiresAuth: true,
   },
   {

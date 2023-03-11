@@ -37,6 +37,15 @@ const routes = [
         }
       },
       {
+        path: 'orders',
+        component: () => import('pages/OrderList.vue'),
+        name: 'orders',
+        meta: {
+          role: "sale",
+          requiresAuth: true
+        }
+      },
+      {
         path: 'login',
         component: () => import('pages/LoginPage.vue'),
         name: 'login'

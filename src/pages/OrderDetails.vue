@@ -14,7 +14,9 @@
         <q-btn icon="save" @click="saveOrder" />
       </div>
     </template>
-    <div v-else class="text-center text-h6">No products in cart</div>
+    <div v-else-if="isCart" class="text-center text-h6">
+      No products in cart
+    </div>
   </q-page>
 </template>
 
