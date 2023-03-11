@@ -20,7 +20,7 @@ const routes = [
       },
       {
         path: 'cart',
-        component: () => import('pages/CartPage.vue'),
+        component: () => import('pages/OrderDetails.vue'),
         name: 'cart',
         meta: {
           role: "sale",

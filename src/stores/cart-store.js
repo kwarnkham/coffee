@@ -6,6 +6,7 @@ export const useCartStore = defineStore('cart', {
     cart: {
       products: LocalStorage.getItem('products') ?? [],
       discount: LocalStorage.getItem('discount') ?? 0,
+      note: LocalStorage.getItem('note') ?? '',
     }
   }),
   getters: {
@@ -27,6 +28,10 @@ export const useCartStore = defineStore('cart', {
       this.cart.discount = Number(value)
       LocalStorage.set('discount', this.cart.discount)
     },
+    setNote (value) {
+      this.cart.note = value
+      LocalStorage.set('note', this.cart.note)
+    },
     updateProduct (product, index) {
       product = JSON.parse(JSON.stringify(product))
       if (product.quantity <= 0) this.cart.products.splice(index, 1)
@@ -36,8 +41,10 @@ export const useCartStore = defineStore('cart', {
     clear () {
       this.cart.products = []
       this.cart.discount = 0
+      this.cart.note = ''
       LocalStorage.set('products', this.cart.products)
       LocalStorage.set('discount', this.cart.discount)
+      LocalStorage.set('note', this.cart.note)
     },
   },
 });

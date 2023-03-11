@@ -37,7 +37,7 @@
                 product.price - (product.discount ?? 0) || "FOC"
               ).toLocaleString()
             }}
-            <template v-if="product.toppings">
+            <template v-if="product.toppings && product.toppings.length > 0">
               +
               {{
                 getToppings(product.toppings)
