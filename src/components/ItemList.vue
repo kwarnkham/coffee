@@ -1,5 +1,5 @@
 <template>
-  <q-list>
+  <q-list bordered separator>
     <q-item v-for="item in items" :key="item.id">
       <q-item-section>
         <div>{{ item.name }}</div>
@@ -7,7 +7,11 @@
       </q-item-section>
       <q-item-section top side class="q-gutter-y-sm">
         <q-btn icon="edit" @click="showEditNameDialog(item)" />
+        <q-btn icon="info" @click="showReduceStockDialog(item, 'Fix stock')" />
+      </q-item-section>
+      <q-item-section top side class="q-gutter-y-sm">
         <q-btn icon="eject" @click="showReduceStockDialog(item)" />
+        <q-btn icon="add" @click="$emit('addStock', item)" />
       </q-item-section>
     </q-item>
   </q-list>
@@ -23,7 +27,7 @@ const props = defineProps({
     required: true,
   },
 });
-const emit = defineEmits(["itemUpdated"]);
+const emit = defineEmits(["itemUpdated", "addStock"]);
 const { dialog } = useQuasar();
 const { api } = useUtil();
 const showEditNameDialog = (item) => {
@@ -49,12 +53,12 @@ const showEditNameDialog = (item) => {
   });
 };
 
-const showReduceStockDialog = (item) => {
+const showReduceStockDialog = (item, note) => {
   dialog({
     noBackdropDismiss: true,
     position: "top",
     cancel: true,
-    title: `Reduce stock of item ${item.name}`,
+    title: `Reduce stock of item ${item.name}. ${note ?? ""}`,
     prompt: {
       type: "number",
       inputmode: "numeric",
@@ -69,6 +73,7 @@ const showReduceStockDialog = (item) => {
       url: `items/${item.id}/reduce-stock`,
       data: {
         quantity: val,
+        note,
       },
     }).then(({ data }) => {
       emit("itemUpdated", data.item);

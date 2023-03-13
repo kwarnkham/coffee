@@ -3,7 +3,7 @@
     <div class="text-h6 text-center">Inventory Items</div>
     <q-separator spaced />
     <div class="text-center">
-      <q-btn icon="add" round flat @click="showInventoryItemFormDialog" />
+      <q-btn icon="add" round flat @click="showInventoryItemFormDialog()" />
     </div>
     <q-separator spaced />
     <q-input v-model.trim="search" label="Search">
@@ -18,6 +18,7 @@
       :items="pagination.data"
       class="col overflow-auto"
       @item-updated="updateItemList"
+      @add-stock="showInventoryItemFormDialog"
     />
     <q-separator spaced />
 
@@ -41,9 +42,12 @@ import useUtil from "src/composables/util";
 
 const { dialog } = useQuasar();
 const { vhPage } = useUtil();
-const showInventoryItemFormDialog = () => {
+const showInventoryItemFormDialog = (item) => {
   dialog({
     component: InventoryItemFormDialog,
+    componentProps: {
+      item,
+    },
   }).onOk((item) => {
     const index = pagination.value.data.findIndex((e) => e.id == item.id);
     if (index != -1) pagination.value.data[index] = item;

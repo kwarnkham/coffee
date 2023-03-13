@@ -2,7 +2,13 @@
   <q-form @submit.prevent="submit" class="q-px-md q-pb-md">
     <div class="text-center text-subtitle1 text-weight-bold">Record Item</div>
 
-    <q-input v-model="form.name" required label="Name" autofocus />
+    <q-input
+      v-model="form.name"
+      required
+      label="Name"
+      :autofocus="!item"
+      :disable="item != undefined"
+    />
     <q-input
       v-model.number="form.price"
       required
@@ -13,6 +19,7 @@
     />
     <q-input
       v-model.number="form.quantity"
+      :autofocus="!!item"
       required
       label="Quantity"
       type="numeric"
@@ -42,10 +49,16 @@ import useUtil from "src/composables/util";
 import { debounce } from "quasar";
 
 const emit = defineEmits(["itemPurchased"]);
+const props = defineProps({
+  item: {
+    type: Object,
+    required: false,
+  },
+});
 const form = ref({
-  name: "",
+  name: props?.item?.name ?? "",
   quantity: "",
-  price: "",
+  price: props?.item?.latest_purchase?.price,
   note: "",
 });
 
@@ -88,7 +101,7 @@ const submit = () => {
 watch(
   form,
   () => {
-    search.value = form.value.name;
+    if (!props.item) search.value = form.value.name;
   },
   {
     deep: true,

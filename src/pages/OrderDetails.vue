@@ -10,8 +10,9 @@
         editable
         :discount="cartStore.getCart.discount"
       />
-      <div class="text-right q-mt-sm">
+      <div class="text-right q-mt-sm q-gutter-x-sm">
         <q-btn icon="save" @click="saveOrder" />
+        <q-btn icon="clear" @click="clearCart" v-if="isCart" />
       </div>
     </template>
     <div v-else-if="isCart" class="text-center text-h6">
@@ -21,7 +22,6 @@
 </template>
 
 <script setup>
-import { useQuasar } from "quasar";
 import OrderProducts from "src/components/OrderProducts.vue";
 import useUtil from "src/composables/util";
 import { useCartStore } from "src/stores/cart-store";
@@ -65,6 +65,11 @@ const saveOrder = () => {
       assignData(data);
     }
   });
+};
+
+const clearCart = () => {
+  products.value = [];
+  cartStore.clear();
 };
 
 const assignData = (data) => {

@@ -7,7 +7,9 @@
           <q-item-label caption>{{ product.price }} MMK</q-item-label>
           <div
             class="row q-mt-sm q-gutter-x-sm"
-            v-if="userStore.getUser?.roles?.map((e) => e.name).includes('sale')"
+            v-if="
+              userStore.getUser?.roles?.map((e) => e.name).includes('admin')
+            "
           >
             <q-btn icon="add" @click="showAddProductStockDialog(product)" />
             <q-btn
@@ -19,7 +21,7 @@
         </q-item-section>
         <q-item-section
           class="text-right"
-          v-if="product.stock - getCartQuantity(product)"
+          v-if="product.stock - getCartQuantity(product) > 0"
         >
           <div><q-icon name="check_circle" size="2em" color="positive" /></div>
           <q-item-label caption>
@@ -29,10 +31,10 @@
             <q-btn icon="save" v-for="i in 3" :key="i" />
           </div> -->
         </q-item-section>
-        <q-item-section class="text-right" v-else>
+        <!-- <q-item-section class="text-right" v-else>
           <div><q-icon name="info" size="2em" color="warning" /></div>
           <q-item-label caption> ဖုန်းခေါ်ပြီးကြိုစုံစမ်းကြည့်ပါ</q-item-label>
-        </q-item-section>
+        </q-item-section> -->
       </q-item>
     </q-list>
   </q-page>

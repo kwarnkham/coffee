@@ -9,7 +9,7 @@
       <div class="text-right q-mt-sm">
         <q-btn icon="close" flat @click="onDialogCancel" />
       </div>
-      <InventoryItemForm @item-purchased="onDialogOK" />
+      <InventoryItemForm @item-purchased="onDialogOK" :item="item" />
     </q-card>
   </q-dialog>
 </template>
@@ -18,7 +18,12 @@
 import { useDialogPluginComponent } from "quasar";
 import InventoryItemForm from "./InventoryItemForm.vue";
 
-const props = defineProps({});
+const props = defineProps({
+  item: {
+    type: Object,
+    required: false,
+  },
+});
 
 defineEmits([...useDialogPluginComponent.emits]);
 
