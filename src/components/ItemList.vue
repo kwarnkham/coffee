@@ -4,6 +4,24 @@
       <q-item-section>
         <div>{{ item.name }}</div>
         <q-item-label overline>Stock : {{ item.stock }}</q-item-label>
+        <q-separator spaced />
+        <q-item-label v-if="item.latest_consume">
+          <div>
+            Last time,
+            <span class="text-weight-bolder">
+              {{ item.latest_consume.quantity }}
+            </span>
+            is used
+          </div>
+          <div>
+            at
+            {{
+              new Date(item.latest_consume.created_at).toLocaleString("en-GB", {
+                hour12: true,
+              })
+            }}
+          </div>
+        </q-item-label>
       </q-item-section>
       <q-item-section top side class="q-gutter-y-sm">
         <q-btn icon="edit" @click="showEditNameDialog(item)" />
