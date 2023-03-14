@@ -2,8 +2,18 @@
   <q-page padding :style-fn="vhPage" class="column">
     <div class="text-h6 text-center">Inventory Items</div>
     <q-separator spaced />
-    <div class="text-center">
+    <div class="text-center q-gutter-x-md">
       <q-btn icon="add" round flat @click="showInventoryItemFormDialog()" />
+      <q-btn
+        icon="shopping_basket"
+        round
+        flat
+        @click="
+          $router.push({
+            name: 'item-order',
+          })
+        "
+      />
     </div>
     <q-separator spaced />
     <q-input v-model.trim="search" label="Search">
