@@ -1,7 +1,16 @@
 <template>
   <q-page padding>
-    <div class="text-center">
+    <div class="text-center q-gutter-x-xs">
       <q-btn icon="add" @click="showExpenseFormDialog" />
+      <q-btn
+        label="Expense Type"
+        no-caps
+        @click="
+          $router.push({
+            name: 'expense-type',
+          })
+        "
+      />
     </div>
     <q-separator spaced />
     <div class="text-center text-h6">Purchases</div>

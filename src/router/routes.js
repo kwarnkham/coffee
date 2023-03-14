@@ -64,6 +64,15 @@ const routes = [
         }
       },
       {
+        path: 'expense-type',
+        component: () => import('pages/ExpenseType.vue'),
+        name: 'expense-type',
+        meta: {
+          role: "sale",
+          requiresAuth: true
+        }
+      },
+      {
         path: 'login',
         component: () => import('pages/LoginPage.vue'),
         name: 'login'

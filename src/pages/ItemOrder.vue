@@ -81,7 +81,7 @@ const showOrder = () => {
       model: orderItems.value.map((e) => e.id),
       // inline: true
       items: orderItems.value.map((e) => ({
-        label: `${e.name}, (${e.quantity})`,
+        label: `${e.name} (${e.quantity})`,
         value: e.id,
       })),
     },
