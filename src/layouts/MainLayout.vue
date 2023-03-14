@@ -112,7 +112,12 @@ const links = [
   },
   {
     name: "Orders",
-    route: "orders",
+    route: "order",
+    requiresAuth: true,
+  },
+  {
+    name: "Expenses",
+    route: "expense",
     requiresAuth: true,
   },
   {

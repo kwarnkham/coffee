@@ -28,7 +28,7 @@ const routes = [
         }
       },
       {
-        path: 'orders/:order',
+        path: 'order/:order',
         component: () => import('pages/OrderDetails.vue'),
         name: 'order-details',
         meta: {
@@ -37,9 +37,9 @@ const routes = [
         }
       },
       {
-        path: 'orders',
+        path: 'order',
         component: () => import('pages/OrderList.vue'),
-        name: 'orders',
+        name: 'order',
         meta: {
           role: "sale",
           requiresAuth: true
@@ -49,6 +49,15 @@ const routes = [
         path: 'item-order',
         component: () => import('pages/ItemOrder.vue'),
         name: 'item-order',
+        meta: {
+          role: "sale",
+          requiresAuth: true
+        }
+      },
+      {
+        path: 'expense',
+        component: () => import('pages/ExpensePage.vue'),
+        name: 'expense',
         meta: {
           role: "sale",
           requiresAuth: true

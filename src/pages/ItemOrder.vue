@@ -18,9 +18,9 @@
         @click="showChooseQty(item)"
       >
         <q-item-section>
-          <q-item-label
-            >{{ item.name }} ({{ item.stock }} remaining)</q-item-label
-          >
+          <q-item-label>
+            {{ item.name }} ({{ item.stock }} remaining)
+          </q-item-label>
         </q-item-section>
         <q-item-section side v-if="item.quantity">
           <q-item-label overline>Quantity: {{ item.quantity }} </q-item-label>
