@@ -3,6 +3,7 @@
 node_modules
 .env
 .env.prod
+*.zip
 
 # Quasar core related directories
 .quasar
