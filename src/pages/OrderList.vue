@@ -14,7 +14,10 @@
           })
         "
       >
-        <q-item-section> #{{ order.id }} {{ order.note }} </q-item-section>
+        <q-item-section>
+          <span> #{{ order.id }} {{ order.note }} </span>
+          <q-item-label>{{ parseOrderStatus(order.status) }}</q-item-label>
+        </q-item-section>
         <q-item-section side top>
           {{
             new Date(order.updated_at).toLocaleString("en-GB", { hour12: true })
@@ -26,7 +29,9 @@
 </template>
 
 <script setup>
+import useApp from "src/composables/app";
 import usePagination from "src/composables/pagination";
 
 const { pagination } = usePagination("orders");
+const { parseOrderStatus } = useApp();
 </script>
