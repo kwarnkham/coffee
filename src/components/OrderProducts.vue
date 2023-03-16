@@ -157,6 +157,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(["productUpdated"]);
+
 const toppings = ref([]);
 
 if (props.editable)
@@ -177,26 +179,19 @@ const showAddToppingDialog = (product, index) => {
         items: toppings.value.map((e) => ({ label: e.name, value: e.id })),
       },
     }).onOk((toppings) => {
-      cartStore.updateProduct(
-        {
+      emit("productUpdated", {
+        product: {
           ...product,
           toppings: toppings.length ? toppings : undefined,
         },
-        index
-      );
+        index: index,
+      });
     });
 };
 
 const editQuanity = (product, index) => {
   dialog({
     title: "Cart quantity",
-    message: `${
-      product.stock +
-      product.quantity -
-      props.products
-        .filter((e) => e.id == product.id)
-        .reduce((carry, e) => carry + e.quantity, 0)
-    } left`,
     noBackdropDismiss: true,
     cancel: true,
     position: "top",
@@ -205,15 +200,7 @@ const editQuanity = (product, index) => {
       inputmode: "numeric",
       pattern: "[0-9]*",
       model: "",
-      isValid: (val) =>
-        val >= 0 &&
-        val <=
-          product.stock +
-            product.quantity -
-            props.products
-              .filter((e) => e.id == product.id)
-              .reduce((carry, e) => carry + e.quantity, 0) &&
-        val != "",
+      isValid: (val) => val >= 0 && val != "",
     },
   }).onOk((qty) => {
     if (qty == 0)
@@ -224,12 +211,19 @@ const editQuanity = (product, index) => {
         cancel: true,
       })
         .onOk(() => {
-          cartStore.updateProduct({ ...product, quantity: Number(qty) }, index);
+          emit("productUpdated", {
+            product: { ...product, quantity: Number(qty) },
+            index: index,
+          });
         })
         .onCancel(() => {
           editQuanity(product, index);
         });
-    else cartStore.updateProduct({ ...product, quantity: Number(qty) }, index);
+    else
+      emit("productUpdated", {
+        product: { ...product, quantity: Number(qty) },
+        index: index,
+      });
   });
 };
 
