@@ -54,19 +54,11 @@ const showProductFormDialog = (product) => {
     },
   }).onOk((product) => {
     const products = JSON.parse(JSON.stringify(productStore.getProducts));
-    if (product.status == 1) {
-      const index = products.findIndex((e) => e.id == product.id);
-      if (index != -1) {
-        products[index] = product;
-        productStore.setProducts(products);
-      } else productStore.setProducts([...products, product]);
-    } else if (product.status == 2) {
-      const index = products.findIndex((e) => e.id == product.id);
-      if (index != -1) {
-        products.splice(index, 1);
-        productStore.setProducts(products);
-      }
-    }
+    const index = products.findIndex((e) => e.id == product.id);
+    if (index != -1) {
+      products[index] = product;
+      productStore.setProducts(products);
+    } else productStore.setProducts([...products, product]);
   });
 };
 </script>
