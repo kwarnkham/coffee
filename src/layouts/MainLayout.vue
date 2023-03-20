@@ -21,7 +21,7 @@
 
         <q-toolbar-title> သေးသေးတင် Coffee </q-toolbar-title>
 
-        <div>
+        <div v-if="userStore.getUser">
           <q-btn
             icon="shopping_cart"
             round

@@ -33,7 +33,7 @@
       <q-btn
         icon="save"
         @click="saveOrder(1)"
-        v-if="!isClean"
+        v-if="!isClean && (order ? order.status == 1 : true)"
         color="primary"
       />
       <q-btn
@@ -87,6 +87,7 @@ const isClean = computed(
         found != undefined &&
         found.pivot.quantity == e.quantity &&
         found.pivot.price == e.price &&
+        e.foc == (found.pivot.foc == 1) &&
         (found.pivot.toppings == undefined
           ? e.toppings == undefined || e.toppings?.length == 0
           : found.pivot.toppings.length == e.toppings?.length)
@@ -154,6 +155,7 @@ const assignData = (data) => {
     product.quantity = product.pivot.quantity;
     product.name = product.pivot.name;
     product.toppings = product.pivot.toppings.map((el) => el.id);
+    product.foc = product.pivot.foc == 1;
     return product;
   });
 

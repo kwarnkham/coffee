@@ -31,7 +31,12 @@
           </span>
         </td>
         <td class="text-right">
-          <span :class="{ 'text-accent': product.discount }">
+          <span @click="toggleFOC(product, key)" v-if="product.foc"> FOC </span>
+          <span
+            v-else
+            :class="{ 'text-accent': product.discount }"
+            @click="toggleFOC(product, key)"
+          >
             {{
               (
                 product.price - (product.discount ?? 0) || "FOC"
@@ -158,6 +163,17 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["productUpdated"]);
+
+const toggleFOC = (product, index) => {
+  dialog({
+    title: product.foc ? "Mark as not FOC" : "Mark as FOC",
+    noBackdropDismiss: true,
+    cancel: true,
+  }).onOk(() => {
+    product.foc = !product.foc;
+    emit("productUpdated", { product, index });
+  });
+};
 
 const toppings = ref([]);
 
