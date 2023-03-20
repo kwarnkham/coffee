@@ -1,5 +1,8 @@
 <template>
   <q-page>
+    <div class="text-center q-py-xs">
+      <q-btn icon="add" @click="showAddProductDialog" />
+    </div>
     <q-list separator padding>
       <q-item v-for="product in productStore.getProducts" :key="product.id">
         <q-item-section no-wrap>
@@ -23,9 +26,19 @@
 import { useUserStore } from "src/stores/user-store";
 import { useProductStore } from "src/stores/products-store";
 import useApp from "src/composables/app";
+import { useQuasar } from "quasar";
+import ProductFormDialog from "src/components/ProductFormDialog.vue";
 
 const userStore = useUserStore();
+const { dialog } = useQuasar();
 
 const productStore = useProductStore();
 const { showAddProductToCartDialog } = useApp();
+const showAddProductDialog = () => {
+  dialog({
+    component: ProductFormDialog,
+  }).onOk((product) => {
+    productStore.setProducts([...productStore.getProducts, product]);
+  });
+};
 </script>
