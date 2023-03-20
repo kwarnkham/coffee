@@ -9,7 +9,7 @@
       <div class="text-right q-mt-sm">
         <q-btn icon="close" flat @click="onDialogCancel" />
       </div>
-      <ProductForm @submitted="onDialogOK" />
+      <ProductForm @submitted="onDialogOK" :product="product" />
     </q-card>
   </q-dialog>
 </template>
@@ -19,6 +19,12 @@ import { useDialogPluginComponent } from "quasar";
 import ProductForm from "src/components/ProductForm.vue";
 
 defineEmits([...useDialogPluginComponent.emits]);
+defineProps({
+  product: {
+    type: Object,
+    required: false,
+  },
+});
 
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
   useDialogPluginComponent();
