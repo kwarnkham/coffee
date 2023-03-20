@@ -23,13 +23,22 @@
           </div>
         </q-item-label>
       </q-item-section>
-      <q-item-section top side class="q-gutter-y-sm">
+      <q-item-section
+        top
+        side
+        class="q-gutter-y-sm"
+        v-if="userStore.getUser.roles.map((e) => e.name).includes('admin')"
+      >
         <q-btn icon="edit" @click="showEditNameDialog(item)" />
         <q-btn icon="info" @click="showReduceStockDialog(item, 'Fix stock')" />
       </q-item-section>
       <q-item-section top side class="q-gutter-y-sm">
         <q-btn icon="eject" @click="showReduceStockDialog(item)" />
-        <q-btn icon="add" @click="$emit('addStock', item)" />
+        <q-btn
+          icon="add"
+          @click="$emit('addStock', item)"
+          v-if="userStore.getUser.roles.map((e) => e.name).includes('admin')"
+        />
       </q-item-section>
     </q-item>
   </q-list>
@@ -38,6 +47,7 @@
 <script setup>
 import { useQuasar } from "quasar";
 import useUtil from "src/composables/util";
+import { useUserStore } from "src/stores/user-store";
 
 const props = defineProps({
   items: {
@@ -48,6 +58,7 @@ const props = defineProps({
 const emit = defineEmits(["itemUpdated", "addStock"]);
 const { dialog } = useQuasar();
 const { api } = useUtil();
+const userStore = useUserStore();
 const showEditNameDialog = (item) => {
   dialog({
     noBackdropDismiss: true,

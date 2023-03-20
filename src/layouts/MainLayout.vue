@@ -55,7 +55,11 @@
             exact
             clickable
             v-if="
-              (link.requiresAuth && userStore.getUser) ||
+              (link.requiresAuth &&
+                userStore.getUser &&
+                userStore.getUser.roles
+                  .map((e) => e.name)
+                  .includes(link.role)) ||
               (link.onlyGuest && !userStore.getUser) ||
               (!link.requiresAuth && !link.onlyGuest)
             "
@@ -109,16 +113,19 @@ const links = [
     name: "Inventory Item",
     route: "inventory-item",
     requiresAuth: true,
+    role: "sale",
   },
   {
     name: "Orders",
     route: "order",
     requiresAuth: true,
+    role: "sale",
   },
   {
     name: "Expenses",
     route: "expense",
     requiresAuth: true,
+    role: "admin",
   },
   {
     name: "Login",

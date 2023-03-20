@@ -2,7 +2,10 @@
   <q-page padding :style-fn="vhPage" class="column">
     <div class="text-h6 text-center">Inventory Items</div>
     <q-separator spaced />
-    <div class="text-center q-gutter-x-md">
+    <div
+      class="text-center q-gutter-x-md"
+      v-if="userStore.getUser.roles.map((e) => e.name).includes('admin')"
+    >
       <q-btn icon="add" round flat @click="showInventoryItemFormDialog()" />
       <q-btn
         icon="shopping_basket"
@@ -49,9 +52,11 @@ import usePagination from "src/composables/pagination";
 import AppPagination from "src/components/AppPagination.vue";
 import useSearchFilter from "src/composables/searchFilter";
 import useUtil from "src/composables/util";
+import { useUserStore } from "src/stores/user-store";
 
 const { dialog } = useQuasar();
 const { vhPage } = useUtil();
+const userStore = useUserStore();
 const showInventoryItemFormDialog = (item) => {
   dialog({
     component: InventoryItemFormDialog,

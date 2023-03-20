@@ -9,7 +9,7 @@
         type="text"
         label="Note"
         v-model.lazy="note"
-        :disable="order?.status != 1"
+        :disable="!isCart && [3, 4].includes(order?.status)"
       />
     </div>
     <div class="text-center q-my-xs" v-if="order?.status == 1 || isCart">
@@ -39,7 +39,12 @@
       <q-btn
         icon="paid"
         @click="saveOrder(2)"
-        v-if="!isCart && isClean && order?.status == 1"
+        v-if="
+          !isCart &&
+          isClean &&
+          order?.status == 1 &&
+          userStore.getUser.roles.map((e) => e.name).includes('admin')
+        "
         color="positive"
       />
       <q-btn
