@@ -31,11 +31,9 @@
           </span>
         </td>
         <td class="text-right">
-          <span @click="toggleFOC(product, key)" v-if="product.foc"> FOC </span>
           <span
-            v-else
             :class="{ 'text-accent': product.discount }"
-            @click="toggleFOC(product, key)"
+            @click="showDiscountDialog(product, key)"
           >
             {{
               (
@@ -56,17 +54,19 @@
           <span @click="editQuanity(product, key)">{{ product.quantity }}</span>
         </td>
         <td class="text-right">
-          <span>
+          <span @click="toggleFOC(product, key)">
             {{
-              (
-                (product.price -
-                  (product.discount ?? 0) +
-                  getToppings(product.toppings).reduce(
-                    (carry, el) => carry + el.price,
-                    0
-                  )) *
-                  product.quantity || "FOC"
-              ).toLocaleString()
+              product.foc
+                ? "FOC"
+                : (
+                    (product.price -
+                      (product.discount ?? 0) +
+                      getToppings(product.toppings).reduce(
+                        (carry, el) => carry + el.price,
+                        0
+                      )) *
+                      product.quantity || "FOC"
+                  ).toLocaleString()
             }}
           </span>
         </td>
@@ -80,6 +80,7 @@
         <td class="text-right">
           {{
             products
+              .filter((e) => !e.foc)
               .reduce(
                 (carry, product) =>
                   carry +
@@ -96,33 +97,26 @@
           }}
         </td>
       </tr>
-      <!-- <tr>
-        <td colspan="3"></td>
-        <td class="text-right" @click="applyDiscount">Discount</td>
-        <td class="text-right">
-          <span>
-            {{ discount.toLocaleString() }}
-          </span>
-        </td>
-      </tr> -->
       <tr>
         <td colspan="3"></td>
         <td class="text-right">Amount</td>
         <td class="text-right">
           {{
             (
-              products.reduce(
-                (carry, product) =>
-                  carry +
-                  (product.price -
-                    (product.discount ?? 0) +
-                    getToppings(product.toppings).reduce(
-                      (carry, el) => carry + el.price,
-                      0
-                    )) *
-                    product.quantity,
-                0
-              ) - discount || "FOC"
+              products
+                .filter((e) => !e.foc)
+                .reduce(
+                  (carry, product) =>
+                    carry +
+                    (product.price -
+                      (product.discount ?? 0) +
+                      getToppings(product.toppings).reduce(
+                        (carry, el) => carry + el.price,
+                        0
+                      )) *
+                      product.quantity,
+                  0
+                ) - discount || "FOC"
             ).toLocaleString()
           }}
         </td>
@@ -134,12 +128,10 @@
 <script setup>
 import { useQuasar } from "quasar";
 import useUtil from "src/composables/util";
-import { useCartStore } from "src/stores/cart-store";
 import { ref } from "vue";
 
 const { api } = useUtil();
 const { dialog } = useQuasar();
-const cartStore = useCartStore();
 
 const getToppings = (toppingIds) => {
   if (!toppingIds) return [];
@@ -171,6 +163,25 @@ const toggleFOC = (product, index) => {
     cancel: true,
   }).onOk(() => {
     product.foc = !product.foc;
+    emit("productUpdated", { product, index });
+  });
+};
+
+const showDiscountDialog = (product, index) => {
+  dialog({
+    title: "Discount for " + product.name,
+    message: "Price is " + product.price,
+    position: "top",
+    noBackdropDismiss: true,
+    cancel: true,
+    prompt: {
+      type: "number",
+      inputmode: "numeric",
+      pattern: "[0-9]*",
+      isValid: (val) => val >= 0 && val <= product.price,
+    },
+  }).onOk((val) => {
+    product.discount = Number(val);
     emit("productUpdated", { product, index });
   });
 };
@@ -242,30 +253,4 @@ const editQuanity = (product, index) => {
       });
   });
 };
-
-// const applyDiscount = () => {
-//   dialog({
-//     title: "Apply discount",
-//     message: `Discount for the whole order`,
-//     prompt: {
-//       model: cartStore.getCart.discount || "",
-//       type: "number",
-//       inputmode: "numeric",
-//       pattern: "[0-9]*",
-//       isValid: (val) =>
-//         val <=
-//           props.products.reduce(
-//             (carry, product) =>
-//               carry +
-//               (product.price - (product.discount ?? 0)) * product.quantity,
-//             0
-//           ) && val >= 0,
-//     },
-//     position: "top",
-//     noBackdropDismiss: true,
-//     cancel: true,
-//   }).onOk((value) => {
-//     cartStore.applyDiscount(value);
-//   });
-// };
 </script>

@@ -93,6 +93,7 @@ const isClean = computed(
         found.pivot.quantity == e.quantity &&
         found.pivot.price == e.price &&
         e.foc == (found.pivot.foc == 1) &&
+        found.pivot.discount == e.discount &&
         (found.pivot.toppings == undefined
           ? e.toppings == undefined || e.toppings?.length == 0
           : found.pivot.toppings.length == e.toppings?.length)
@@ -161,6 +162,7 @@ const assignData = (data) => {
     product.name = product.pivot.name;
     product.toppings = product.pivot.toppings.map((el) => el.id);
     product.foc = product.pivot.foc == 1;
+    product.discount = product.pivot.discount;
     return product;
   });
 
