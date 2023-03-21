@@ -18,7 +18,7 @@ export const useCartStore = defineStore('cart', {
       product.quantity = Number(quantity);
       const existed = this.cart.products.findIndex(
         e => e.id == product.id &&
-          (!e.toppings || e.toppings.length == 0)
+          (!e.toppings || e.toppings.length == 0) && !e.foc
       );
       if (existed == -1) this.cart.products.push(product)
       else this.cart.products[existed].quantity += product.quantity

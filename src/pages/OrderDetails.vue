@@ -174,7 +174,8 @@ const addNewProduct = ({ product, quantity }) => {
   product = JSON.parse(JSON.stringify(product));
   product.quantity = Number(quantity);
   const existed = products.value.findIndex(
-    (e) => e.id == product.id && (!e.toppings || e.toppings.length == 0)
+    (e) =>
+      e.id == product.id && (!e.toppings || e.toppings.length == 0) && !e.foc
   );
   if (existed == -1) products.value.push(product);
   else products.value[existed].quantity += product.quantity;
