@@ -25,13 +25,20 @@
         </q-item-section>
       </q-item>
     </q-list>
+    <AppPagination
+      v-model="current"
+      :max="max"
+      :pagination="pagination"
+      v-if="pagination"
+    />
   </q-page>
 </template>
 
 <script setup>
+import AppPagination from "src/components/AppPagination.vue";
 import useApp from "src/composables/app";
 import usePagination from "src/composables/pagination";
 
-const { pagination } = usePagination("orders");
+const { pagination, current, max } = usePagination("orders");
 const { parseOrderStatus } = useApp();
 </script>
