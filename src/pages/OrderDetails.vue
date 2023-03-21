@@ -48,6 +48,17 @@
         color="positive"
       />
       <q-btn
+        icon="cancel"
+        @click="saveOrder(4)"
+        v-if="
+          !isCart &&
+          isClean &&
+          order?.status == 1 &&
+          userStore.getUser.roles.map((e) => e.name).includes('admin')
+        "
+        color="warning"
+      />
+      <q-btn
         label="Clear"
         @click="clearCart"
         no-caps
@@ -85,9 +96,8 @@ const isClean = computed(
   () =>
     products.value.length == order.value?.products.length &&
     note.value == order.value.note &&
-    products.value.every((e) => {
-      const found = order.value.products.find((el) => el.id == e.id);
-
+    products.value.every((e, index) => {
+      const found = order.value.products[index];
       return (
         found != undefined &&
         found.pivot.quantity == e.quantity &&
