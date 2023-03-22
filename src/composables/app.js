@@ -18,7 +18,7 @@ export default function useApp () {
         type: "number",
         inputmode: "numeric",
         pattern: "[0-9]*",
-        model: "",
+        model: "1",
         isValid: (val) => val != "",
       },
     }).onOk((val) => {
