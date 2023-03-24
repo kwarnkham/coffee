@@ -15,6 +15,7 @@
         }
       "
     />
+    <div class="text-center" v-if="summery">{{ summery.toLocaleString() }}</div>
     <q-list bordered padding separator>
       <q-item
         clickable
@@ -55,11 +56,16 @@ import useApp from "src/composables/app";
 import usePagination from "src/composables/pagination";
 import DateRangeSearch from "src/components/DateRangeSearch.vue";
 import useDateRangeFilter from "src/composables/dateRangeFilter";
+import { useUserStore } from "src/stores/user-store";
 
+const userStore = useUserStore();
 const { from, to } = useDateRangeFilter();
-const { pagination, current, max, fetch } = usePagination("orders", {
+const { pagination, current, max, fetch, summery } = usePagination("orders", {
   from: from.value,
   to: to.value,
+  summery: userStore.getUser.roles.map((e) => e.name).includes("investor")
+    ? 1
+    : undefined,
 });
 const { parseOrderStatus } = useApp();
 </script>

@@ -14,7 +14,9 @@
     </div>
     <q-separator spaced />
 
-    <div class="text-center text-h6">Purchases</div>
+    <div class="text-center text-h6">
+      Purchases {{ summery ? summery.toLocaleString() : "" }}
+    </div>
     <DateRangeSearch
       :fetch="fetch"
       :from="from"
@@ -67,12 +69,20 @@ import usePagination from "src/composables/pagination";
 import ExpenseFormDialog from "src/components/ExpenseFormDialog.vue";
 import useDateRangeFilter from "src/composables/dateRangeFilter";
 import DateRangeSearch from "src/components/DateRangeSearch.vue";
+import { useUserStore } from "src/stores/user-store";
 
+const userStore = useUserStore();
 const { from, to } = useDateRangeFilter();
-const { pagination, current, max, fetch } = usePagination("purchases", {
-  from: from.value,
-  to: to.value,
-});
+const { pagination, current, max, fetch, summery } = usePagination(
+  "purchases",
+  {
+    from: from.value,
+    to: to.value,
+    summery: userStore.getUser.roles.map((e) => e.name).includes("investor")
+      ? 1
+      : undefined,
+  }
+);
 const { dialog } = useQuasar();
 
 const showExpenseFormDialog = () => {

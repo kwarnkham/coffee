@@ -8,6 +8,7 @@ export default function usePagination (url, params) {
   const pagination = ref(null);
   const total = ref(0)
   const current = ref(Number(route.query.page ?? 1) ?? 1);
+  const summery = ref(0)
   const { api } = useUtil()
   const max = computed(
     () => Math.ceil(pagination.value?.total / pagination.value?.per_page) || 1
@@ -47,6 +48,7 @@ export default function usePagination (url, params) {
       pagination.value = response.data.data;
       current.value = response.data.data.current_page;
       total.value = response.data.total
+      summery.value = response.data.summery
     });
   }
 
@@ -75,6 +77,7 @@ export default function usePagination (url, params) {
     max,
     current,
     total,
-    fetch
+    fetch,
+    summery
   }
 }
