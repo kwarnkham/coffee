@@ -92,7 +92,7 @@ const showReduceStockDialog = (item, note) => {
       type: "number",
       inputmode: "numeric",
       pattern: "[0-9]*",
-      model: "",
+      model: "1",
       isValid: (val) => val > 0 && val <= item.stock,
       hint: item.stock + " Remaining",
     },
