@@ -13,7 +13,23 @@
       />
     </div>
     <q-separator spaced />
+
     <div class="text-center text-h6">Purchases</div>
+    <DateRangeSearch
+      :fetch="fetch"
+      :from="from"
+      :to="to"
+      @from-selected="
+        (payload) => {
+          from = payload;
+        }
+      "
+      @to-selected="
+        (payload) => {
+          to = payload;
+        }
+      "
+    />
     <q-list v-if="pagination" separator padding>
       <q-item v-for="purchase in pagination.data" :key="purchase.id">
         <q-item-section>
@@ -22,9 +38,16 @@
           <q-item-label>Qty: {{ purchase.quantity }}</q-item-label>
         </q-item-section>
         <q-item-section side top>
-          <q-item-label overline>{{
-            purchase.quantity * purchase.price
-          }}</q-item-label>
+          <q-item-label overline>
+            {{ purchase.quantity * purchase.price }}
+          </q-item-label>
+          <q-item-label>
+            {{
+              new Date(purchase.created_at).toLocaleString("en-GB", {
+                hour12: true,
+              })
+            }}
+          </q-item-label>
         </q-item-section>
       </q-item>
     </q-list>
@@ -42,8 +65,14 @@ import { useQuasar } from "quasar";
 import AppPagination from "src/components/AppPagination.vue";
 import usePagination from "src/composables/pagination";
 import ExpenseFormDialog from "src/components/ExpenseFormDialog.vue";
+import useDateRangeFilter from "src/composables/dateRangeFilter";
+import DateRangeSearch from "src/components/DateRangeSearch.vue";
 
-const { pagination, current, max } = usePagination("purchases");
+const { from, to } = useDateRangeFilter();
+const { pagination, current, max, fetch } = usePagination("purchases", {
+  from: from.value,
+  to: to.value,
+});
 const { dialog } = useQuasar();
 
 const showExpenseFormDialog = () => {

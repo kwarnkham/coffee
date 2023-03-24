@@ -34,6 +34,7 @@ export default function usePagination (url, params) {
       pagination.value = response.data.data;
       total.value = response.data.total
 
+      //reset scroll to top
       const el = document.getElementsByClassName('q-list overflow-auto');
       if (el) {
         el[0]?.children[0]?.scrollIntoView()
@@ -55,8 +56,9 @@ export default function usePagination (url, params) {
     router.replace({
       name: route.name,
       query: query
+    }).then(() => {
+      fetch(query)
     })
-    fetch(query)
   })
 
   watch(current, () => {

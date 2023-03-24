@@ -1,31 +1,20 @@
 <template>
   <q-page padding v-if="pagination">
-    <div>
-      <q-input v-model="from" type="date">
-        <template v-slot:prepend>
-          <span
-            class="text-caption text-weight-bold inline-block text-right"
-            style="width: 3em"
-          >
-            From
-          </span>
-        </template>
-      </q-input>
-      <q-separator vertical />
-      <q-input v-model="to" type="date">
-        <template v-slot:prepend>
-          <span
-            class="text-caption text-weight-bold inline-block text-right"
-            style="width: 3em"
-          >
-            To
-          </span>
-        </template>
-      </q-input>
-      <div class="q-my-sm text-right">
-        <q-btn icon="search" @click="findByDates" flat />
-      </div>
-    </div>
+    <DateRangeSearch
+      :fetch="fetch"
+      :from="from"
+      :to="to"
+      @from-selected="
+        (payload) => {
+          from = payload;
+        }
+      "
+      @to-selected="
+        (payload) => {
+          to = payload;
+        }
+      "
+    />
     <q-list bordered padding separator>
       <q-item
         clickable
@@ -63,8 +52,9 @@
 <script setup>
 import AppPagination from "src/components/AppPagination.vue";
 import useApp from "src/composables/app";
-import useDateRangeFilter from "src/composables/dateRangeFilter";
 import usePagination from "src/composables/pagination";
+import DateRangeSearch from "src/components/DateRangeSearch.vue";
+import useDateRangeFilter from "src/composables/dateRangeFilter";
 
 const { from, to } = useDateRangeFilter();
 const { pagination, current, max, fetch } = usePagination("orders", {
@@ -72,8 +62,4 @@ const { pagination, current, max, fetch } = usePagination("orders", {
   to: to.value,
 });
 const { parseOrderStatus } = useApp();
-
-const findByDates = () => {
-  fetch({ from: from.value, to: to.value });
-};
 </script>
