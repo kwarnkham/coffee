@@ -5,8 +5,9 @@ const { formatDate } = date;
 
 export default function useDateRangeFilter () {
   const route = useRoute()
-  const from = ref(route.query.from ?? formatDate(new Date(), "YYYY-MM-DD"));
-  const to = ref(route.query.to ?? formatDate(new Date(), "YYYY-MM-DD"));
+  const date = new Date();
+  const from = ref(route.query.from ?? formatDate(new Date(date.getFullYear(), date.getMonth(), 1), "YYYY-MM-DD"));
+  const to = ref(route.query.to ?? formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0), "YYYY-MM-DD"));
 
   return {
     from, to
