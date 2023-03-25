@@ -6,13 +6,22 @@
 import { useProductStore } from "src/stores/products-store";
 import useUtil from "src/composables/util";
 import { useUserStore } from "./stores/user-store";
+import { useRoleStore } from "./stores/role-store";
 import { watch, computed } from "vue";
 
 const productStore = useProductStore();
 const { api } = useUtil();
 const userStore = useUserStore();
+const roleStore = useRoleStore();
 
 const user = computed(() => userStore.getUser);
+
+api({
+  method: "GET",
+  url: "roles",
+}).then(({ data }) => {
+  roleStore.setRoles(data.roles);
+});
 watch(
   user,
   () => {

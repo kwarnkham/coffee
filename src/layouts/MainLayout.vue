@@ -128,6 +128,12 @@ const links = [
     role: "admin",
   },
   {
+    name: "Users",
+    route: "users",
+    requiresAuth: true,
+    role: "admin",
+  },
+  {
     name: "Login",
     route: "login",
     onlyGuest: true,
