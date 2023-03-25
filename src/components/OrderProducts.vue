@@ -16,7 +16,16 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(product, key) in products" :key="key">
+      <tr
+        v-for="(product, key) in products"
+        :key="key"
+        :class="{
+          'bg-secondary': product.group == 2,
+          'bg-info': product.group == 3,
+          'bg-accent': product.group == 4,
+          'text-white': product.group != 1,
+        }"
+      >
         <td class="text-left">{{ key + 1 }}</td>
         <td class="text-left">
           <span @click="showAddToppingDialog(product, key)">
