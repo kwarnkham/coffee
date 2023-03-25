@@ -35,9 +35,32 @@
           <q-item-label>{{ parseOrderStatus(order.status) }}</q-item-label>
         </q-item-section>
         <q-item-section side top>
-          {{
-            new Date(order.updated_at).toLocaleString("en-GB", { hour12: true })
-          }}
+          <span>
+            {{
+              new Date(order.updated_at).toLocaleString("en-GB", {
+                hour12: true,
+              })
+            }}
+          </span>
+          <span>
+            {{
+              order.products.reduce(
+                (carry, product) =>
+                  (product.pivot.foc
+                    ? 0
+                    : (product.pivot.price +
+                        product.pivot.toppings.reduce(
+                          (carry, topping) =>
+                            topping.pivot.price * topping.pivot.quantity +
+                            carry,
+                          0
+                        ) -
+                        product.pivot.discount) *
+                      product.pivot.quantity) + carry,
+                0
+              )
+            }}
+          </span>
         </q-item-section>
       </q-item>
     </q-list>
