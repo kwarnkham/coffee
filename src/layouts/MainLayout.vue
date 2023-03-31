@@ -49,6 +49,13 @@
           {{
             userStore.getUser?.roles?.map((e) => e.name).join(", ") ?? "Welcome"
           }}
+          <span v-if="userStore.getUser">
+            {{
+              userStore.getUser?.roles.map((e) => e.name).includes("customer")
+                ? "09-" + userStore.getUser.name
+                : userStore.getUser.name
+            }}
+          </span>
         </q-item-label>
         <template v-for="link in links" :key="link.route">
           <q-item
@@ -132,6 +139,12 @@ const links = [
     route: "users",
     requiresAuth: true,
     role: "admin",
+  },
+  {
+    name: "Customers",
+    route: "customers",
+    requiresAuth: true,
+    role: "sale",
   },
   {
     name: "Login",

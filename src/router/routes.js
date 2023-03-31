@@ -82,6 +82,15 @@ const routes = [
         }
       },
       {
+        path: 'customers',
+        component: () => import('pages/CustomersPage.vue'),
+        name: 'customers',
+        meta: {
+          role: "sale",
+          requiresAuth: true
+        }
+      },
+      {
         path: 'login',
         component: () => import('pages/LoginPage.vue'),
         name: 'login'
