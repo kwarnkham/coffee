@@ -62,13 +62,14 @@
             exact
             clickable
             v-if="
+              (link.requiresAuth && userStore.getUser && !link.role) ||
               (link.requiresAuth &&
                 userStore.getUser &&
                 userStore.getUser.roles
                   .map((e) => e.name)
                   .includes(link.role)) ||
               (link.onlyGuest && !userStore.getUser) ||
-              (!link.requiresAuth && !link.onlyGuest)
+              (!link.onlyGuest && !link.requiresAuth)
             "
             :to="{
               name: link.route,
@@ -145,6 +146,11 @@ const links = [
     route: "customers",
     requiresAuth: true,
     role: "sale",
+  },
+  {
+    name: "Change Password",
+    route: "change-password",
+    requiresAuth: true,
   },
   {
     name: "Login",

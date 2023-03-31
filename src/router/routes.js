@@ -91,6 +91,14 @@ const routes = [
         }
       },
       {
+        path: 'change-password',
+        component: () => import('pages/ChangePassword.vue'),
+        name: 'change-password',
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
         path: 'login',
         component: () => import('pages/LoginPage.vue'),
         name: 'login'
