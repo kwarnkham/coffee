@@ -23,7 +23,12 @@
         <q-item-section side>
           <div class="row q-gutter-x-xs">
             <q-btn icon="add" round @click="addCupCount(user)" />
-            <q-btn icon="coffee" round @click="redeem(user)" />
+            <q-btn
+              icon="coffee"
+              round
+              @click="redeem(user)"
+              :disabled="user.cup - user.redemption * 10 < 10"
+            />
           </div>
         </q-item-section>
       </q-item>

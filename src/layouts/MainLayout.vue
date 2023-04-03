@@ -24,6 +24,7 @@
         <div v-if="userStore.getUser">
           <q-btn
             icon="shopping_cart"
+            v-if="userStore.getUser.roles.map((e) => e.name).includes('sale')"
             round
             color="secondary"
             @click="
@@ -38,6 +39,23 @@
               floating
               v-if="cartStore.getCart.products.length > 0"
             />
+          </q-btn>
+          <q-btn
+            icon="person"
+            v-else-if="
+              userStore.getUser.roles.map((e) => e.name).includes('customer')
+            "
+            round
+            color="secondary"
+            @click="
+              $router.push({
+                name: 'customer-details',
+                params: {
+                  user: userStore.getUser.id,
+                },
+              })
+            "
+          >
           </q-btn>
         </div>
       </q-toolbar>
