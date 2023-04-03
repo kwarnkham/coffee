@@ -8,11 +8,18 @@
         @click="showAddCustomerDialog"
       />
     </div>
+    <div class="text-center">
+      <q-input label="Search..." v-model="search">
+        <template v-slot:append>
+          <q-icon name="search" />
+        </template>
+      </q-input>
+    </div>
 
     <q-list v-if="pagination" class="col overflow-auto">
       <q-item v-for="user in pagination.data" :key="user.id">
         <q-item-section>
-          <q-item-label>{{ user.name }} </q-item-label>
+          <q-item-label>09-{{ user.name }} </q-item-label>
           <q-item-label caption>
             <q-icon name="add" />{{ user.cup }}
           </q-item-label>
@@ -46,12 +53,21 @@
 import { useQuasar } from "quasar";
 import AppPagination from "src/components/AppPagination.vue";
 import usePagination from "src/composables/pagination";
+import useSearchFilter from "src/composables/searchFilter";
 import useUtil from "src/composables/util";
 
 const { dialog } = useQuasar();
 const { api, vhPage } = useUtil();
-const { pagination, current, max } = usePagination("users", {
+const { pagination, current, max, fetch } = usePagination("users", {
   role: "customer",
+});
+
+const { search } = useSearchFilter({
+  current,
+  fetch,
+  params: {
+    role: "customer",
+  },
 });
 
 const showAddCustomerDialog = () => {
