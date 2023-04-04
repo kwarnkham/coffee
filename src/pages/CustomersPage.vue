@@ -9,7 +9,7 @@
       />
     </div>
     <div class="text-center">
-      <q-input label="Search..." v-model="search">
+      <q-input label="Search..." v-model="search" type="tel">
         <template v-slot:append>
           <q-icon name="search" />
         </template>
