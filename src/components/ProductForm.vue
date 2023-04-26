@@ -12,6 +12,14 @@
       pattern="[0-9]*"
       label="Price"
     />
+    <q-input
+      v-model.number="form.group"
+      required
+      type="number"
+      inputmode="numeric"
+      pattern="[0-9]*"
+      label="Group"
+    />
     <q-input v-model="form.description" type="textarea" label="Description" />
     <div class="q-gutter-sm">
       <q-radio
@@ -56,6 +64,7 @@ const submit = () => {
       price: form.value.price,
       description: form.value.description,
       status: form.value.status,
+      group: form.value.group,
     },
   };
 
@@ -73,5 +82,6 @@ const form = ref({
   price: props.product?.price ?? "",
   description: props.product?.description ?? "",
   status: props.product?.status ?? 1,
+  group: props.product?.group,
 });
 </script>
